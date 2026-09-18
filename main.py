@@ -1,5 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 from visualization import  Visualizaton
 
 def check_anomaly(row):
@@ -28,8 +27,4 @@ v.visual("timestamp","temperature")
 v.visual("timestamp","voltage")
 v.visual("timestamp","current")
 v.visual("timestamp","angular_velocity")
-
-df_an = df[df["anomaly"] == True]
-
-v_an = Visualizaton(df_an)
 v.visual("timestamp","anomaly")
