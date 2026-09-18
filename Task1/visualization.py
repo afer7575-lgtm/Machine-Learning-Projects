@@ -14,6 +14,6 @@ class Visualizaton:
         plt.xlabel(name_x)
         plt.ylabel(name_y)
 
-        image_path = Path(__file__).parent / f"{name_y}_image.png"
+        image_path = Path(__file__).parent / "image" /f"{name_y}_image.png"
         plt.savefig(image_path)
         plt.close()
