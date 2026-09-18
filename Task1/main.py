@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from visualization import  Visualizaton
+from utils.visualization import  Visualizaton
 
 def check_anomaly(row):
     if row['temperature'] > 50:
@@ -14,7 +14,7 @@ def check_anomaly(row):
     return False
 
 
-csv_path = Path(__file__).parent.parent / "telemetry_dzz_sem1.csv"
+csv_path = Path(__file__).parent.parent / "data" / "telemetry_dzz_sem1.csv"
 df = pd.read_csv(csv_path)
 print(df.describe())
 
@@ -24,10 +24,6 @@ print(df.head())
 
 print(df[df["anomaly"] == True])
 
-
-v = Visualizaton(df)
-v.visual("timestamp","temperature")
-v.visual("timestamp","voltage")
-v.visual("timestamp","current")
-v.visual("timestamp","angular_velocity")
-v.visual("timestamp","anomaly")
+path_to_save = Path(__file__).parent / "image"
+v = Visualizaton(df, path_to_save)
+v.visual_all("timestamp")
