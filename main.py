@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from visualization import  Visualizaton
 
 def check_anomaly(row):
     if row['temperature'] > 50:
@@ -21,70 +22,14 @@ print(df.head())
 
 print(df[df["anomaly"] == True])
 
-# Графики
-name_x = "timestamp"
-name_y = "temperature"
-x = df[name_x]
-y = df[name_y]
 
-plt.scatter(x,y)
-plt.xticks([])
-plt.xlabel(name_x)
-plt.ylabel(name_y)
-
-plt.savefig(f"{name_y}_image.png")
-plt.close()
-
-name_x = "timestamp"
-name_y = "voltage"
-x = df[name_x]
-y = df[name_y]
-
-plt.scatter(x,y)
-plt.xticks([])
-plt.xlabel(name_x)
-plt.ylabel(name_y)
-
-plt.savefig(f"{name_y}_image.png")
-plt.close()
-
-name_x = "timestamp"
-name_y = "current"
-x = df[name_x]
-y = df[name_y]
-
-plt.scatter(x,y)
-plt.xticks([])
-plt.xlabel(name_x)
-plt.ylabel(name_y)
-
-plt.savefig(f"{name_y}_image.png")
-plt.close()
-
-name_x = "timestamp"
-name_y = "angular_velocity"
-x = df[name_x]
-y = df[name_y]
-
-plt.scatter(x,y)
-plt.xticks([])
-plt.xlabel(name_x)
-plt.ylabel(name_y)
-
-plt.savefig(f"{name_y}_image.png")
-plt.close()
+v = Visualizaton(df)
+v.visual("timestamp","temperature")
+v.visual("timestamp","voltage")
+v.visual("timestamp","current")
+v.visual("timestamp","angular_velocity")
 
 df_an = df[df["anomaly"] == True]
 
-name_x = "timestamp"
-name_y = "anomaly"
-x = df[name_x]
-y = df[name_y]
-
-plt.scatter(x,y)
-plt.xticks([])
-plt.xlabel(name_x)
-plt.ylabel(name_y)
-
-plt.savefig(f"{name_y}_image.png")
-plt.close()
+v_an = Visualizaton(df_an)
+v.visual("timestamp","anomaly")
