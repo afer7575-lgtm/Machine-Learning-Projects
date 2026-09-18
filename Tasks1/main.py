@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 from visualization import  Visualizaton
 
 def check_anomaly(row):
@@ -12,7 +13,9 @@ def check_anomaly(row):
         return True
     return False
 
-df = pd.read_csv("telemetry_dzz_sem1.csv")
+
+csv_path = Path(__file__).parent.parent / "telemetry_dzz_sem1.csv"
+df = pd.read_csv(csv_path)
 print(df.describe())
 
 df["anomaly"] = df.apply(check_anomaly, axis=1)
