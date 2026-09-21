@@ -10,34 +10,61 @@ df = pd.read_csv(csv_path_data)
 #print(df.groupby('mode')['temperature'].describe())
 #print(df.groupby('mode').describe())
 
-def analysis(df, column_for_analysis, sigma_value):
+def analysis(df, column_for_analysis, std_value):
     mean = df[column_for_analysis].mean()
     std = df[column_for_analysis].std()
     new_series = (
-            abs(df[column_for_analysis] - mean) > sigma_value * std
+            abs(df[column_for_analysis] - mean) > std_value * std
     )
     return new_series
 
-df_s1 = df
-df_s1["anomaly"] = (analysis(df, "temperature", 1)|
+df["anomaly_s1"] = (analysis(df, "temperature", 1)|
                     analysis(df, "voltage", 1)|
                     analysis(df, "current", 1)|
                     analysis(df, "angular_velocity", 1))
 
-print(len(df_s1[df_s1['anomaly'] == True]))
+print(f"Кол-во аномалий в диапазоне от -std до std: {len(df[df['anomaly_s1'] == True])}")
 
-df_s2 = df
-df_s2["anomaly"] = (analysis(df, "temperature", 2)|
+df["anomaly_s2"] = (analysis(df, "temperature", 2)|
                     analysis(df, "voltage", 2)|
                     analysis(df, "current", 2)|
                     analysis(df, "angular_velocity", 2))
 
-print(len(df_s2[df_s2['anomaly'] == True]))
+print(f"Кол-во аномалий в диапазоне от -2*std до 2*std: {len(df[df['anomaly_s2'] == True])}")
 
-df_s3 = df
-df_s3["anomaly"] = (analysis(df, "temperature", 3)|
+df["anomaly_s3"] = (analysis(df, "temperature", 3)|
                     analysis(df, "voltage", 3)|
                     analysis(df, "current", 3)|
                     analysis(df, "angular_velocity", 3))
 
-print(len(df_s3[df_s3['anomaly'] == True]))
+print(f"Кол-во аномалий в диапазоне от -3*std до 3*std: {len(df[df['anomaly_s3'] == True])}")
+
+df_diff = pd.DataFrame()
+df_diff["timestamp"] = df["timestamp"]
+df_diff["temperature_diff"] = df['temperature'].diff()
+df_diff["voltage_diff"] = df['voltage'].diff()
+df_diff["current_diff"] = df['current'].diff()
+df_diff["angular_velocity_diff"] = df['angular_velocity'].diff()
+
+path_to_save = Path(__file__).parent / "image"
+v = Visualizaton(df_diff, path_to_save)
+v.visual_all("timestamp")
+
+def check_anomaly(row):
+    if abs(row['temperature_diff']) > 5:
+        return True
+    elif abs(row['angular_velocity_diff'])> 0.5:
+        return True
+    elif abs(row['voltage_diff']) > 2:
+        return True
+    elif abs(row['current_diff']) > 1:
+        return True
+    return False
+
+df["anomaly_diff"] = df_diff.apply(check_anomaly, axis=1)
+print(f"Кол-во аномалий выявленных по diff: {len(df[df['anomaly_diff'] == True])}")
+print(df[(df["anomaly_diff"]==True) & (df["anomaly_s1"]==False)])
+
+# Значения аномалий при std не коректно, потому-что не учтены режимы работы спутника mode
+# При anomaly_diff нужно тоже учитывать режимы, ведь каждый переход от режима к режиму будет считаться аномалией
+# Но при anomaly_diff эти ошибки можно пока что свести к погрешности

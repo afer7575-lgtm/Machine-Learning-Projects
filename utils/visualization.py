@@ -22,3 +22,6 @@ class Visualizaton:
 
     def visual_all(self, name_x):
         for name_y in self.df.columns.drop(name_x).tolist(): self.visual(name_x, name_y)
+
+    #По-хорошему надо нахер убрать visual_all и сделать так чтобы visual работал с несколькими значениями name_y
+    #и перебирал columns при отсутствии name_y
