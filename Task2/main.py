@@ -68,3 +68,57 @@ print(df[(df["anomaly_diff"]==True) & (df["anomaly_s1"]==False)])
 # Значения аномалий при std не коректно, потому-что не учтены режимы работы спутника mode
 # При anomaly_diff нужно тоже учитывать режимы, ведь каждый переход от режима к режиму будет считаться аномалией
 # Но при anomaly_diff эти ошибки можно пока что свести к погрешности
+
+def analysis(df, columns_for_analysis, std_value):
+    if isinstance(columns_for_analysis,str):columns_for_analysis = [columns_for_analysis]
+    mean = df.groupby("mode")[columns_for_analysis].transform("mean")
+    std = df.groupby("mode")[columns_for_analysis].transform("std")
+
+    return ( (df[columns_for_analysis]-mean).abs() > (std_value * std) ).any(axis=1)
+
+
+df["anomaly_s1"] = analysis(df,
+                            ["temperature", "voltage", "current", "angular_velocity"],
+                            1)
+
+print(f"Кол-во аномалий в диапазоне от -std до std: {len(df[df['anomaly_s1'] == True])}")
+
+df["anomaly_s2"] = analysis(df,
+                            ["temperature", "voltage", "current", "angular_velocity"],
+                            2)
+
+print(f"Кол-во аномалий в диапазоне от -2*std до 2*std: {len(df[df['anomaly_s2'] == True])}")
+
+df["anomaly_s3"] = analysis(df,
+                            ["temperature", "voltage", "current", "angular_velocity"],
+                            3)
+
+print(f"Кол-во аномалий в диапазоне от -3*std до 3*std: {len(df[df['anomaly_s3'] == True])}")
+
+print("\nКол-во аномальных строк, если хотя бы 2 и более параметра определенны аномальными:")
+
+def analysis(df, columns_for_analysis, std_value):
+    if isinstance(columns_for_analysis,str):columns_for_analysis = [columns_for_analysis]
+    mean = df.groupby("mode")[columns_for_analysis].transform("mean")
+    std = df.groupby("mode")[columns_for_analysis].transform("std")
+
+    return ( (df[columns_for_analysis]-mean).abs() > (std_value * std) ).sum(axis=1) >= 2
+
+
+df["anomaly_s1"] = analysis(df,
+                            ["temperature", "voltage", "current", "angular_velocity"],
+                            1)
+
+print(f"Кол-во аномалий в диапазоне от -std до std: {len(df[df['anomaly_s1'] == True])}")
+
+df["anomaly_s2"] = analysis(df,
+                            ["temperature", "voltage", "current", "angular_velocity"],
+                            2)
+
+print(f"Кол-во аномалий в диапазоне от -2*std до 2*std: {len(df[df['anomaly_s2'] == True])}")
+
+df["anomaly_s3"] = analysis(df,
+                            ["temperature", "voltage", "current", "angular_velocity"],
+                            3)
+
+print(f"Кол-во аномалий в диапазоне от -3*std до 3*std: {len(df[df['anomaly_s3'] == True])}")
