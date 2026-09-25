@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from utils.visualization import  Visualizaton
+from utils.visualization import  Visualization
 
 def check_anomaly(row):
     if row['temperature'] > 50:
@@ -25,5 +25,5 @@ print(df.head())
 print(df[df["anomaly"] == True])
 
 path_to_save = Path(__file__).parent / "image"
-v = Visualizaton(df, path_to_save)
+v = Visualization(df, path_to_save)
 v.visual_all("timestamp")

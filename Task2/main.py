@@ -1,4 +1,4 @@
-from utils.visualization import Visualizaton
+from utils.visualization import Visualization
 import pandas as pd
 from pathlib import Path
 
@@ -47,7 +47,7 @@ df_diff["current_diff"] = df['current'].diff()
 df_diff["angular_velocity_diff"] = df['angular_velocity'].diff()
 
 path_to_save = Path(__file__).parent / "image"
-v = Visualizaton(df_diff, path_to_save)
+v = Visualization(df_diff, path_to_save)
 v.visual_all("timestamp")
 
 def check_anomaly(row):
@@ -63,7 +63,7 @@ def check_anomaly(row):
 
 df["anomaly_diff"] = df_diff.apply(check_anomaly, axis=1)
 print(f"Кол-во аномалий выявленных по diff: {len(df[df['anomaly_diff'] == True])}")
-print(df[(df["anomaly_diff"]==True) & (df["anomaly_s1"]==False)])
+#print(df[(df["anomaly_diff"]==True) & (df["anomaly_s1"]==False)])
 
 # Значения аномалий при std не коректно, потому-что не учтены режимы работы спутника mode
 # При anomaly_diff нужно тоже учитывать режимы, ведь каждый переход от режима к режиму будет считаться аномалией

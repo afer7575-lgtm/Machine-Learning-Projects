@@ -1,16 +1,17 @@
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-class Visualizaton:
+class Visualization:
     def __init__(self,df, path_to_save):
         self.df = df
         self.path_to_save = path_to_save
 
     def visual(self, name_x, name_y):
+        plt.figure(figsize=(12, 4))
         x = self.df[name_x]
         y = self.df[name_y]
 
-        plt.scatter(x,y)
+        plt.plot(x,y)
         plt.xticks([])
         plt.xlabel(name_x)
         plt.ylabel(name_y)
