@@ -48,7 +48,7 @@ df_diff["angular_velocity_diff"] = df['angular_velocity'].diff()
 
 path_to_save = Path(__file__).parent / "image"
 v = Visualization(df_diff, path_to_save)
-v.visual_all("timestamp")
+v.visual("timestamp", not_lin=True)
 
 def check_anomaly(row):
     if abs(row['temperature_diff']) > 5:

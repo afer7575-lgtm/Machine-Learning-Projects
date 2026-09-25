@@ -13,7 +13,6 @@ def check_anomaly(row):
         return True
     return False
 
-
 csv_path = Path(__file__).parent.parent / "data" / "telemetry_dzz_sem1.csv"
 df = pd.read_csv(csv_path)
 print(df.describe())
@@ -25,5 +24,5 @@ print(df.head())
 print(df[df["anomaly"] == True])
 
 path_to_save = Path(__file__).parent / "image"
-v = Visualization(df, path_to_save)
-v.visual("timestamp")
+v = Visualization(df, path_to_save, not_us=["anomaly", "mode"])
+v.visual("timestamp", name_mark="anomaly")
