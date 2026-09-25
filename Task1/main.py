@@ -26,4 +26,4 @@ print(df[df["anomaly"] == True])
 
 path_to_save = Path(__file__).parent / "image"
 v = Visualization(df, path_to_save)
-v.visual_all("timestamp")
+v.visual("timestamp")
